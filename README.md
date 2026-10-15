@@ -7,7 +7,7 @@ session into another machine. Wrangler runs as plain Node.js on-device, with its
 the pure-WebAssembly esbuild so no native binary is needed.
 
 Proven on an **iPhone 6s Plus (A9), iOS 15.8.5, Dopamine (rootless)** together with
-[**node-ios**](https://github.com/al5ina5/node-ios) (Node.js 22.19 with full JIT + WebAssembly).
+[**node-ios**](https://github.com/repos1tory/node-ios) (Node.js 22.19 with full JIT + WebAssembly).
 
 ```
 $ wrangler deploy
@@ -21,7 +21,7 @@ Current Version ID: 76cf8d5d-c34c-4ce3-8ebc-6cab27293a94
 ## Requirements
 
 - Jailbroken **rootless** iOS 15+ device (arm64) — Dopamine, palera1n rootless, etc.
-- [`node-ios`](https://github.com/al5ina5/node-ios) installed (`node` on `PATH` via its shim).
+- [`node-ios`](https://github.com/repos1tory/node-ios) installed (`node` on `PATH` via its shim).
   The installer below can bootstrap it automatically if it's missing.
 - `sudo` (the rootless bootstrap lives in `/var/jb`, owned by root).
 
@@ -30,7 +30,7 @@ Current Version ID: 76cf8d5d-c34c-4ce3-8ebc-6cab27293a94
 On the device:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/al5ina5/wrangler-ios/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/repos1tory/wrangler-ios/main/install.sh | sh
 ```
 
 The installer:
@@ -109,7 +109,7 @@ export CLOUDFLARE_API_TOKEN=...
 
 ```sh
 # manual: extract the release bundle yourself
-curl -fL -o /tmp/wrangler.tar.gz https://github.com/al5ina5/wrangler-ios/releases/download/v4.151.0/wrangler-ios-bundle.tar.gz
+curl -fL -o /tmp/wrangler.tar.gz https://github.com/repos1tory/wrangler-ios/releases/download/v4.151.0/wrangler-ios-bundle.tar.gz
 sudo mkdir -p /var/jb/usr/lib/wrangler
 sudo tar -xzf /tmp/wrangler.tar.gz -C /var/jb/usr/lib/wrangler
 
