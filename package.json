@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "esbuild": "npm:esbuild-wasm@^0.28.2",
+    "wrangler": "^4.151.0"
+  }
+}

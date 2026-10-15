@@ -1,0 +1,9 @@
+# reference shims — install.sh writes these on-device with the right paths.
+#
+# /var/jb/usr/bin/node  (installed by node-ios; the node shim is what makes
+# everything else safe on-device):
+#!/var/jb/bin/sh
+exec /var/jb/usr/lib/node-ios/node --predictable --single-threaded --disable-wasm-trap-handler "$@"
+#
+# /var/jb/usr/bin/wrangler  (installed by this repo):
+#     exec <node shim> /var/jb/usr/lib/wrangler/node_modules/wrangler/bin/wrangler.js "$@"
