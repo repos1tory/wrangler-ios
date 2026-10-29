@@ -70,10 +70,11 @@ if [ -d /var/jb ] && [ "$(uname -s)" = "Darwin" ]; then
   # On iOS the launcher already sees process.platform === "ios".
   ( cd "$FIXTURE" && PREFIX="$PREFIX" sh "$WRANGLER" deploy --dry-run --outdir "$OUTDIR" )
 else
-  # Use the same iOS branch on Linux/macOS CI runners.
-  ( cd "$FIXTURE" && PREFIX="$PREFIX" sh "$WRANGLER" --version >/dev/null )
+  # Use the same iOS branch on Linux/macOS CI runners. --require keeps the
+  # Wrangler entry as the main module, which its bin wrapper checks.
   ( cd "$FIXTURE" && WRANGLER_IOS_WORKERD="$PREFIX/usr/bin/workerd-ios-unavailable" \
-      node "$ROOT/scripts/test-ios-entry.mjs" "$ENTRY" deploy --dry-run --outdir "$OUTDIR" )
+      node --predictable --single-threaded --disable-wasm-trap-handler \
+        --require "$ROOT/scripts/ios-preload.cjs" "$ENTRY" deploy --dry-run --outdir "$OUTDIR" )
 fi
 
 [ -s "$OUTDIR/index.js" ] || { echo "FAIL: dry-run produced no index.js" >&2; exit 1; }
