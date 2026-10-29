@@ -1,0 +1,3 @@
+#!/var/jb/bin/sh
+echo "Wrangler local development is unavailable: Cloudflare workerd has no iOS port." >&2
+exit 69

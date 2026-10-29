@@ -1,0 +1,60 @@
+name: build and test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.19.0"
+          cache: npm
+
+      - name: Check jailbreak-neutral runtime files
+        run: sh scripts/check-jailbreak.sh
+
+      - name: Build rootless .deb
+        run: sh scripts/build-deb.sh
+
+      - name: Smoke-test package without installing it
+        run: sh scripts/test-package.sh dist/*.deb
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wrangler-ios
+          path: |
+            dist/*.deb
+            dist/wrangler-ios-bundle.tar.gz
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    needs: package
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: wrangler-ios
+          path: dist
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 ||
+            gh release create "$GITHUB_REF_NAME" dist/* \
+              --title "$GITHUB_REF_NAME" --generate-notes
